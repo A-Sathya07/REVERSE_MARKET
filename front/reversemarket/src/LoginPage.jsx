@@ -1,9 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowDownUp, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
 const API_URL = "http://localhost:5000";
-const DASHBOARD_PATH = "/dashboard"; // used if no onLogin prop is passed
-const AUTH_URL = `${API_URL}/login`; // one route handles both login and register
 
 function GoogleIcon() {
   return (
@@ -50,8 +49,10 @@ function Field({ id, label, icon: Icon, right, ...inputProps }) {
   );
 }
 
-export default function LoginPage({ onLogin }) {
-  const [mode, setMode] = useState("login"); // "login" | "register"
+export default function LoginPage() {
+  const navigate = useNavigate();
+
+  const [mode, setMode] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,20 +71,24 @@ export default function LoginPage({ onLogin }) {
   }
 
   function storeSession(data) {
-    const user = data.user || { user_id: data.user_id, email: email.trim() };
+    const user = data.user || {
+      user_id: data.user_id,
+      email: email.trim(),
+    };
 
-    sessionStorage.setItem("user_id", String(data.user_id || user.user_id || ""));
+    sessionStorage.setItem(
+      "user_id",
+      String(data.user_id || user.user_id || ""),
+    );
+
     sessionStorage.setItem("user", JSON.stringify(user));
+
     if (data.access_token) {
       sessionStorage.setItem("access_token", data.access_token);
     }
 
-    if (typeof onLogin === "function") {
-      onLogin({ ...data, user });
-    } else {
-      // No onLogin prop was passed, so go to the dashboard directly
-      window.location.assign(DASHBOARD_PATH);
-    }
+    // Go to dashboard after successful login/register
+    navigate("/dashboard");
   }
 
   async function handleSubmit(e) {
@@ -104,6 +109,7 @@ export default function LoginPage({ onLogin }) {
         setError("Password must be at least 6 characters.");
         return;
       }
+
       if (password !== confirmPassword) {
         setError("Passwords don't match.");
         return;
@@ -115,16 +121,29 @@ export default function LoginPage({ onLogin }) {
     setLoading(true);
 
     try {
-      const response = await fetch(AUTH_URL, {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
-        credentials: "include", // lets the Flask session cookie be set
+
+        // Allows Flask session cookie to be set
+        credentials: "include",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify(
           isRegister
-            ? { action: "register", name: name.trim(), email: email.trim(), password }
-            : { action: "login", email: email.trim(), password }
+            ? {
+                action: "register",
+                name: name.trim(),
+                email: email.trim(),
+                password,
+              }
+            : {
+                action: "login",
+                email: email.trim(),
+                password,
+              },
         ),
       });
 
@@ -139,25 +158,29 @@ export default function LoginPage({ onLogin }) {
             data.error ||
             (isRegister
               ? "Could not create account."
-              : "Invalid email or password.")
+              : "Invalid email or password."),
         );
+
         return;
       }
 
-      // Same flow for register and login: save the session, then go to dashboard
       setNotice(
         data.message ||
-          (isRegister ? "User created successfully" : "Login successful")
+          (isRegister ? "User created successfully" : "Login successful"),
       );
+
       storeSession(data);
     } catch (err) {
       console.error(err);
+
       const isNetwork =
-        err instanceof TypeError && /fetch|network|load failed/i.test(err.message);
+        err instanceof TypeError &&
+        /fetch|network|load failed/i.test(err.message);
+
       setError(
         isNetwork
           ? "Unable to connect to the server."
-          : "Something went wrong after signing in. Check the browser console."
+          : "Something went wrong after signing in. Check the browser console.",
       );
     } finally {
       setLoading(false);
@@ -165,15 +188,18 @@ export default function LoginPage({ onLogin }) {
   }
 
   function handleGoogleLogin() {
-    // TODO: connect your Google route here, e.g.
+    // TODO: connect your Google route here
     // window.location.href = `${API_URL}/auth/google`;
+
     console.log("Google sign-in clicked");
   }
 
   return (
     <div
       className="rm-login min-h-screen bg-slate-100 flex items-center justify-center px-4 py-10"
-      style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif" }}
+      style={{
+        fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
+      }}
     >
       <style>{`
         .rm-login input:-webkit-autofill,
@@ -184,8 +210,15 @@ export default function LoginPage({ onLogin }) {
           caret-color: #1e293b;
           transition: background-color 9999s ease-in-out 0s;
         }
-        .rm-login input:focus { outline: none; box-shadow: none; }
-        .rm-login input::selection { background: #e9d5ff; }
+
+        .rm-login input:focus {
+          outline: none;
+          box-shadow: none;
+        }
+
+        .rm-login input::selection {
+          background: #e9d5ff;
+        }
       `}</style>
 
       <div className="w-full max-w-md">
@@ -199,6 +232,7 @@ export default function LoginPage({ onLogin }) {
             <h1 className="text-xl font-bold text-slate-900 leading-tight">
               Reverse Market
             </h1>
+
             <p className="text-sm text-slate-500">
               Post what you need. Let sellers come to you.
             </p>
@@ -206,7 +240,7 @@ export default function LoginPage({ onLogin }) {
         </div>
 
         <div className="bg-white border border-slate-200 shadow-sm rounded-3xl p-7">
-          {/* SLIDE TOGGLE */}
+          {/* LOGIN / REGISTER TOGGLE */}
           <div
             role="tablist"
             className="relative flex bg-slate-200 rounded-full p-1 mb-6"
@@ -230,6 +264,7 @@ export default function LoginPage({ onLogin }) {
               { key: "register", label: "Register" },
             ].map((t) => {
               const active = mode === t.key;
+
               return (
                 <button
                   key={t.key}
@@ -251,8 +286,9 @@ export default function LoginPage({ onLogin }) {
             })}
           </div>
 
+          {/* FORM */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* NAME (register only) */}
+            {/* NAME */}
             {isRegister && (
               <Field
                 id="name"
@@ -287,7 +323,9 @@ export default function LoginPage({ onLogin }) {
               autoComplete={isRegister ? "new-password" : "current-password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={isRegister ? "At least 6 characters" : "Enter your password"}
+              placeholder={
+                isRegister ? "At least 6 characters" : "Enter your password"
+              }
               right={
                 <button
                   type="button"
@@ -300,7 +338,7 @@ export default function LoginPage({ onLogin }) {
               }
             />
 
-            {/* CONFIRM PASSWORD (register only) */}
+            {/* CONFIRM PASSWORD */}
             {isRegister && (
               <Field
                 id="confirm-password"
@@ -342,15 +380,17 @@ export default function LoginPage({ onLogin }) {
                   ? "Creating account..."
                   : "Signing in..."
                 : isRegister
-                ? "Create account"
-                : "Sign in"}
+                  ? "Create account"
+                  : "Sign in"}
             </button>
           </form>
 
           {/* DIVIDER */}
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-slate-200" />
+
             <span className="text-xs text-slate-400">or</span>
+
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
@@ -361,6 +401,7 @@ export default function LoginPage({ onLogin }) {
             className="w-full flex items-center justify-center gap-3 bg-white border border-slate-300 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-600 text-slate-700 text-sm font-medium rounded-full py-3 transition-colors"
           >
             <GoogleIcon />
+
             {isRegister ? "Sign up with Google" : "Sign in with Google"}
           </button>
         </div>

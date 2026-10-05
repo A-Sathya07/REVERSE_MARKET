@@ -1,24 +1,39 @@
+import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import ProjectsPage from "./pages/ProjectsPage";
 import LoginPage from "./LoginPage";
-import SettingsPage from "./pages/SettingsPage";
-import LogoutPage from "./pages/LogoutPage";
+import Dashboard from "./Dashboard";
 import RequirementsPage from "./pages/RequirementsPage";
-import "./App.css";
+import ProjectsPage from "./pages/ProjectsPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/requirements" element={<RequirementsPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/projects" element={
+          <ProtectedRoute>
+            <ProjectsPage />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/requirements" element={
+          <ProtectedRoute>
+            <RequirementsPage />
+          </ProtectedRoute>
+        } />  
+
       </Routes>
     </BrowserRouter>
   );
