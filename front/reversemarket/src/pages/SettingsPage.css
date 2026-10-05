@@ -1,0 +1,266 @@
+
+.settings-page-main {
+  min-width: 0;
+  background: #f5f7fc;
+}
+
+.settings-content {
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+  padding: 36px 40px 50px;
+  margin: 0 auto;
+}
+
+.settings-heading {
+  margin-bottom: 26px;
+}
+
+.settings-heading h1 {
+  margin: 8px 0;
+  color: #142957;
+  font-size: 32px;
+}
+
+.settings-heading p {
+  color: #71809a;
+  font-size: 14px;
+}
+
+.account-wallet-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  padding: 25px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(125deg, #304f78, #203149);
+  box-shadow: 0 8px 24px rgba(25, 48, 82, 0.12);
+}
+
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.account-avatar {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #e8edf5;
+  font-size: 34px;
+}
+
+.account-identity h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.account-identity p {
+  margin: 0 0 7px;
+  color: #d6dfef;
+  font-size: 13px;
+}
+
+.account-rating {
+  font-size: 14px;
+}
+
+.account-rating span {
+  color: #f7c45a;
+  letter-spacing: 1px;
+}
+
+.account-rating small {
+  margin-left: 6px;
+  color: #d0daea;
+}
+
+.wallet-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 150px;
+  padding-left: 25px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.wallet-balance > span {
+  color: #d0daea;
+  font-size: 13px;
+}
+
+.wallet-balance > strong {
+  font-size: 24px;
+}
+
+.wallet-balance small {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.settings-section {
+  margin-top: 25px;
+  padding: 22px 24px;
+  border: 1px solid #e0e6f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.settings-section > h2 {
+  margin: 0 0 13px;
+  color: #203454;
+  font-size: 17px;
+}
+
+.settings-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 4px;
+  border: none;
+  border-bottom: 1px solid #edf0f5;
+  background: transparent;
+  color: #25344d;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.settings-menu-item:last-child {
+  border-bottom: none;
+}
+
+.settings-menu-item:hover {
+  color: #3159e8;
+  background: #f8faff;
+}
+
+.settings-menu-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  flex-shrink: 0;
+  color: #394b67;
+  font-size: 21px;
+}
+
+.settings-menu-arrow {
+  margin-left: auto;
+  color: #94a1b5;
+  font-size: 23px;
+}
+
+.theme-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.theme-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-label h2 {
+  margin: 0;
+  color: #203454;
+  font-size: 16px;
+}
+
+.theme-label p {
+  margin: 5px 0 0;
+  color: #8793a8;
+  font-size: 12px;
+}
+
+.theme-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 30px;
+  background: #edf2fb;
+}
+
+.theme-option {
+  padding: 9px 12px;
+  border: none;
+  border-radius: 24px;
+  background: transparent;
+  color: #65738c;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.theme-option.selected {
+  background: #477ff0;
+  color: white;
+  box-shadow: 0 2px 6px rgba(49, 89, 245, 0.2);
+}
+
+.logout-menu-item {
+  color: #cf414b;
+}
+
+.settings-footer {
+  padding: 25px 0 0;
+  color: #8b97aa;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 650px) {
+  .settings-content {
+    padding: 25px 15px 35px;
+  }
+
+  .account-wallet-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .wallet-balance {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: none;
+  }
+
+  .theme-section {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .theme-options {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-between;
+  }
+
+  .theme-option {
+    flex: 1;
+    padding: 9px 5px;
+  }
+
+  .settings-section {
+    padding: 18px 15px;
+  }
+}

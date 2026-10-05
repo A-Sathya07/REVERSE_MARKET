@@ -1,126 +1,199 @@
 
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./ProjectsPage.css";
+import "./SettingsPage.css";
 
 function SettingsPage() {
-  return (
-    <div className="app dashboard-layout projects-layout">
-      <aside className="sidebar">
-        <Link to="/dashboard" className="sidebar-logo">
-          Reverse<span>Market</span>
-        </Link>
+  const [theme, setTheme] = useState("light");
 
-        <p className="sidebar-label">WORKSPACE</p>
+  const accountItems = [
+    { icon: "▣", label: "Add funds" },
+    { icon: "＄", label: "Withdraw funds" },
+    { icon: "▤", label: "Transaction history" },
+    { icon: "▥", label: "Financial dashboard" },
+    { icon: "▱", label: "Payment sharing" },
+  ];
+
+  const toolItems = [
+    { icon: "▦", label: "Account analytics" },
+    { icon: "▣", label: "Bid Insights" },
+    { icon: "☏", label: "Support" },
+  ];
+
+  return (
+    <div className="dashboard-layout">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <span className="brand-mark">R</span>
+          <span>ReverseMarket</span>
+        </div>
 
         <nav className="sidebar-nav">
-          <Link to="/dashboard" className="sidebar-link">
+          <NavLink to="/dashboard" className="sidebar-link">
             <span>▦</span> Dashboard
-          </Link>
-          <Link to="/projects" className="sidebar-link">
+          </NavLink>
+          <NavLink to="/projects" className="sidebar-link">
             <span>▤</span> Projects
-          </Link>
-          <Link to="/settings" className="sidebar-link active">
+          </NavLink>
+          <a href="/dashboard#requirements" className="sidebar-link">
+            <span>☷</span> My Requirements
+          </a>
+          
+          <NavLink to="/settings" className="sidebar-link">
             <span>⚙</span> Settings
-          </Link>
+          </NavLink>
         </nav>
 
         <div className="sidebar-bottom">
+          <div className="sidebar-help">
+            <span className="help-icon">?</span>
+            <div>
+              <strong>Need help?</strong>
+              <p>Explore how ReverseMarket works.</p>
+            </div>
+          </div>
+
           <div className="profile-card">
-            <div className="avatar">D</div>
+            <div className="avatar">S</div>
             <div className="profile-info">
-              <strong>Demo Buyer</strong>
-              <span>Buyer account</span>
+              <strong>Sudharsan</strong>
+              <span>Workspace Member</span>
             </div>
           </div>
         </div>
       </aside>
 
-      <div className="dashboard-main">
+      <main className="dashboard-main settings-page-main">
         <header className="topbar">
           <div>
-            <span className="breadcrumb">Workspace / </span>
+            <span className="breadcrumb-muted">Workspace</span>
+            {" / "}
             <strong>Settings</strong>
+          </div>
+          <div className="workspace-status">
+            <span className="status-dot"></span>
+            Demo Workspace
           </div>
         </header>
 
-        <main className="main-content">
-          <section className="projects-heading">
-            <div>
-              <p className="eyebrow">PREFERENCES</p>
-              <h1>Settings</h1>
-              <p className="projects-subtitle">
-                Manage your profile and workspace preferences.
-              </p>
+        <section className="settings-content">
+          <div className="settings-heading">
+            <span className="workspace-label">YOUR ACCOUNT</span>
+            <h1>Account & Settings</h1>
+            <p>Manage your profile, wallet, preferences, and account tools.</p>
+          </div>
+
+          <section className="account-wallet-card">
+            <div className="account-profile">
+              <div className="account-avatar">👤</div>
+              <div className="account-identity">
+                <h2>sudharsan62</h2>
+                <p>@sudharsan62</p>
+                <div className="account-rating">
+                  <span>★★★★★</span> 0.0
+                  <small>(0 reviews)</small>
+                </div>
+              </div>
+            </div>
+
+           <div className="wallet-balance">
+           <span>Amount Earned</span>
+           <strong>₹1,019.58 <small>INR</small></strong>
+           </div>
+          </section>
+
+          <section className="settings-section">
+            <h2>Financial Management</h2>
+            <div className="settings-menu">
+              {accountItems.map((item) => (
+                <button
+                  className="settings-menu-item"
+                  key={item.label}
+                  onClick={() =>
+                    alert(`${item.label} will be available when connected to the backend.`)
+                  }
+                >
+                  <span className="settings-menu-icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                  <span className="settings-menu-arrow">›</span>
+                </button>
+              ))}
             </div>
           </section>
 
-          <section className="projects-list-section">
-            <h2>Profile Settings</h2>
-            <p className="projects-subtitle">
-              These are demo settings and are not saved to a server.
-            </p>
+          <section className="settings-section theme-section">
+            <div className="theme-label">
+              <span className="settings-menu-icon">☼</span>
+              <div>
+                <h2>Theme</h2>
+                <p>Choose your preferred appearance.</p>
+              </div>
+            </div>
 
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                alert("Settings saved for this demo session.");
-              }}
-              style={{
-                display: "grid",
-                gap: "18px",
-                maxWidth: "550px",
-                marginTop: "25px",
-              }}
-            >
-              <label>
-                Display Name
-                <input
-                  type="text"
-                  defaultValue="Demo Buyer"
-                  style={fieldStyle}
-                />
-              </label>
-
-              <label>
-                Email Address
-                <input
-                  type="email"
-                  defaultValue="buyer@example.com"
-                  style={fieldStyle}
-                />
-              </label>
-
-              <label>
-                Workspace
-                <input
-                  type="text"
-                  defaultValue="ReverseMarket"
-                  style={fieldStyle}
-                />
-              </label>
-
-              <button type="submit" className="primary-button">
-                Save Settings
+            <div className="theme-options">
+              <button
+                className={theme === "light" ? "theme-option selected" : "theme-option"}
+                onClick={() => setTheme("light")}
+                aria-pressed={theme === "light"}
+              >
+                ☀ Light
               </button>
-            </form>
+              <button
+                className={theme === "dark" ? "theme-option selected" : "theme-option"}
+                onClick={() => setTheme("dark")}
+                aria-pressed={theme === "dark"}
+              >
+                ☾ Dark
+              </button>
+              <button
+                className={theme === "system" ? "theme-option selected" : "theme-option"}
+                onClick={() => setTheme("system")}
+                aria-pressed={theme === "system"}
+              >
+                ▣ System
+              </button>
+            </div>
           </section>
-        </main>
-      </div>
+
+          <section className="settings-section">
+            <h2>Account Tools</h2>
+            <div className="settings-menu">
+              {toolItems.map((item) => (
+                <button
+                  className="settings-menu-item"
+                  key={item.label}
+                  onClick={() =>
+                    alert(`${item.label} will be available when connected to the backend.`)
+                  }
+                >
+                  <span className="settings-menu-icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                  <span className="settings-menu-arrow">›</span>
+                </button>
+              ))}
+
+              <NavLink to="/settings" className="settings-menu-item">
+                <span className="settings-menu-icon">⚙</span>
+                <span>Settings</span>
+                <span className="settings-menu-arrow">›</span>
+              </NavLink>
+
+              <NavLink to="/logout" className="settings-menu-item logout-menu-item">
+                <span className="settings-menu-icon">↪</span>
+                <span>Logout</span>
+                <span className="settings-menu-arrow">›</span>
+              </NavLink>
+            </div>
+          </section>
+
+          <footer className="settings-footer">
+            ReverseMarket · Account & Preferences
+          </footer>
+        </section>
+      </main>
     </div>
   );
 }
-
-const fieldStyle = {
-  display: "block",
-  boxSizing: "border-box",
-  width: "100%",
-  marginTop: "8px",
-  padding: "12px",
-  border: "1px solid #d6deed",
-  borderRadius: "8px",
-  background: "#fff",
-  color: "#172554",
-  fontSize: "14px",
-};
 
 export default SettingsPage;
